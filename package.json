@@ -1,0 +1,35 @@
+{
+  "name": "pelias-microservice-wrapper",
+  "version": "1.0.0",
+  "description": "Module that wraps ",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/test | tap-dot",
+    "lint": "jshint .",
+    "travis": "npm run check-dependencies && npm test",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "validate": "npm ls",
+    "check-dependencies": "node_modules/.bin/npm-check --production"
+  },
+  "author": "Mapzen",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pelias/microservice-wrapper.git"
+  },
+  "keywords": [
+    "pelias"
+  ],
+  "devDependencies": {
+    "express": "^4.15.2",
+    "pelias-mock-logger": "^1.1.0",
+    "proxyquire": "^1.7.11",
+    "tape": "^4.6.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "pelias-logger": "^0.2.0",
+    "superagent": "^3.5.2",
+    "tap-dot": "^1.0.5"
+  }
+}
