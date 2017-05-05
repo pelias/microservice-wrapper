@@ -23,6 +23,10 @@ class ServiceConfiguration {
     return this.baseUrl;
   }
 
+  isEnabled() {
+    return !_.isEmpty(this.baseUrl);
+  }
+
   getUrl() {
     return this.baseUrl;
   }

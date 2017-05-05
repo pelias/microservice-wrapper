@@ -44,4 +44,38 @@ tape('ServiceConfiguration tests', (test) => {
 
   });
 
+  test.test('isEnabled should return false when baseUrl is undefined', (t) => {
+    const configBlob = {};
+
+    const serviceConfiguration = new ServiceConfiguration('service name', configBlob);
+
+    t.notOk(serviceConfiguration.isEnabled());
+    t.end();
+
+  });
+
+  test.test('isEnabled should return false when baseUrl is an empty string', (t) => {
+    const configBlob = {
+      url: ''
+    };
+
+    const serviceConfiguration = new ServiceConfiguration('service name', configBlob);
+
+    t.notOk(serviceConfiguration.isEnabled());
+    t.end();
+
+  });
+
+  test.test('isEnabled should return true when baseUrl is a non-empty string', (t) => {
+    const configBlob = {
+      url: 'a'
+    };
+
+    const serviceConfiguration = new ServiceConfiguration('service name', configBlob);
+
+    t.ok(serviceConfiguration.isEnabled());
+    t.end();
+
+  });
+
 });
