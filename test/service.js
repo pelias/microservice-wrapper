@@ -10,7 +10,7 @@ tape('service tests', (test) => {
   test.test('valid interface', (t) => {
     const logger = require('pelias-mock-logger')();
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     });
 
@@ -23,9 +23,9 @@ tape('service tests', (test) => {
 tape('conforms_to tests', (test) => {
   test.test('non-ServiceConfiguration instance should throw error', (t) => {
     const serviceConfig = 'not an instance of serviceConfiguration';
-    const http_json = require('../http_json');
+    const service = require('../service');
 
-    t.throws(http_json.bind(null, serviceConfig), /serviceConfig should be an instance of ServiceConfiguration/);
+    t.throws(service.bind(null, serviceConfig), /serviceConfig should be an instance of ServiceConfiguration/);
     t.end();
 
   });
@@ -42,7 +42,7 @@ tape('do-nothing service tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
@@ -76,7 +76,7 @@ tape('failure conditions tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
@@ -113,7 +113,7 @@ tape('failure conditions tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
@@ -169,7 +169,7 @@ tape('failure conditions tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
@@ -220,7 +220,7 @@ tape('failure conditions tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
@@ -276,7 +276,7 @@ tape('failure conditions tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
@@ -327,7 +327,7 @@ tape('failure conditions tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
@@ -384,7 +384,7 @@ tape('failure conditions tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
@@ -439,7 +439,7 @@ tape('success conditions tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
@@ -487,7 +487,7 @@ tape('success conditions tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
@@ -549,7 +549,7 @@ tape('success conditions tests', (test) => {
       }
     };
 
-    const service = proxyquire('../http_json', {
+    const service = proxyquire('../service', {
       'pelias-logger': logger
     })(new MockServiceConfig());
 

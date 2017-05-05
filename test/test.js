@@ -1,2 +1,3 @@
-require ('./http_json.js');
+require ('./index.js');
+require ('./service.js');
 require ('./ServiceConfiguration.js');
