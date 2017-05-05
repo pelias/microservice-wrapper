@@ -1,7 +1,7 @@
 {
   "name": "pelias-microservice-wrapper",
   "version": "1.0.0",
-  "description": "Module that wraps ",
+  "description": "Module that provides a convenience wrapper around HTTP GET microservices",
   "main": "index.js",
   "scripts": {
     "test": "node test/test | tap-dot",
