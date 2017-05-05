@@ -1,6 +1,6 @@
 {
   "name": "pelias-microservice-wrapper",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "Module that provides a convenience wrapper around HTTP GET microservices",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,8 @@
     "express": "^4.15.2",
     "pelias-mock-logger": "^1.1.0",
     "proxyquire": "^1.7.11",
-    "tape": "^4.6.3"
+    "tape": "^4.6.3",
+    "semantic-release": "^6.3.2"
   },
   "dependencies": {
     "lodash": "^4.17.4",
