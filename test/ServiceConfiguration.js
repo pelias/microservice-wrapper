@@ -4,7 +4,7 @@ const ServiceConfiguration = require('../ServiceConfiguration');
 tape('ServiceConfiguration tests', (test) => {
   test.test('timeout and retries overrides should be returned by getters', (t) => {
     const configBlob = {
-      url: 'base url',
+      url: 'http://localhost:1234/',
       timeout: 17,
       retries: 19
     };
@@ -12,19 +12,31 @@ tape('ServiceConfiguration tests', (test) => {
     const serviceConfiguration = new ServiceConfiguration('service name', configBlob);
 
     t.equals(serviceConfiguration.getName(), 'service name');
-    t.equals(serviceConfiguration.getBaseUrl(), 'base url');
+    t.equals(serviceConfiguration.getBaseUrl(), 'http://localhost:1234/');
     t.deepEquals(serviceConfiguration.getParameters(), {});
     t.deepEquals(serviceConfiguration.getHeaders(), {});
-    t.equals(serviceConfiguration.getUrl(), 'base url');
+    t.equals(serviceConfiguration.getUrl(), 'http://localhost:1234/');
     t.equals(serviceConfiguration.getRetries(), 19);
     t.equals(serviceConfiguration.getTimeout(), 17);
     t.end();
 
   });
 
+  test.test('url not ending with / should append /', (t) => {
+    const configBlob = {
+      url: 'http://localhost:1234'
+    };
+
+    const serviceConfiguration = new ServiceConfiguration('service name', configBlob);
+
+    t.equals(serviceConfiguration.getBaseUrl(), 'http://localhost:1234/');
+    t.end();
+
+  });
+
   test.test('configBlob w/o timeout or retries should default to 250 and 3, respectively', (t) => {
     const configBlob = {
-      url: 'base url'
+      url: 'http://localhost:1234/'
     };
 
     const serviceConfiguration = new ServiceConfiguration('service name', configBlob);

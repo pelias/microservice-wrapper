@@ -9,7 +9,11 @@ class ServiceConfiguration {
     }
 
     this.name = name;
-    this.baseUrl = config.url;
+    if (config.url && !_.endsWith(config.url, '/')) {
+      this.baseUrl = config.url + '/';
+    } else {
+      this.baseUrl = config.url;
+    }
     this.timeout = config.timeout || 250;
     this.retries = config.retries || 3;
 

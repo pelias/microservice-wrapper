@@ -11,7 +11,7 @@ function isDoNotTrack(headers) {
 
 // superagent doesn't exposed the assembled GET request, so synthesize it
 function synthesizeUrl(serviceConfig, req) {
-  const parameters = _.map(serviceConfig.getParameters(), (value, key) => {
+  const parameters = _.map(serviceConfig.getParameters(req), (value, key) => {
     return `${key}=${value}`;
   }).join('&');
 
