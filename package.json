@@ -1,6 +1,6 @@
 {
   "name": "pelias-microservice-wrapper",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "Module that provides a convenience wrapper around HTTP GET microservices",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,9 @@
   },
   "author": "Mapzen",
   "license": "MIT",
+  "engines": {
+    "node": ">= 4.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/pelias/microservice-wrapper.git"
@@ -22,14 +25,22 @@
   ],
   "devDependencies": {
     "express": "^4.15.2",
+    "npm-check": "git://github.com/orangejulius/npm-check.git#disable-update-check",
     "pelias-mock-logger": "^1.1.0",
     "proxyquire": "^1.7.11",
-    "tape": "^4.6.3"
+    "tape": "^4.6.3",
+    "semantic-release": "^6.3.2"
   },
   "dependencies": {
     "lodash": "^4.17.4",
     "pelias-logger": "^0.2.0",
     "superagent": "^3.5.2",
     "tap-dot": "^1.0.5"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "validate",
+    "test",
+    "check-dependencies"
+  ]
 }
