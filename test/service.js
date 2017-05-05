@@ -128,7 +128,7 @@ tape('failure conditions tests', (test) => {
     service(req, (err, results) => {
       t.equals(err.code, 'ECONNREFUSED');
       t.notOk(results);
-      t.ok(logger.isErrorMessage(new RegExp(`^http://localhost:${port} \\[do_not_track\\]: .*ECONNREFUSED`)),
+      t.ok(logger.isErrorMessage(new RegExp(`^http://localhost:${port}/ \\[do_not_track\\]: .*ECONNREFUSED`)),
         'there should be a connection refused error message');
       t.end();
 
@@ -233,9 +233,9 @@ tape('failure conditions tests', (test) => {
     };
 
     service(req, (err, results) => {
-      t.equals(err, `http://localhost:${port} [do_not_track] returned status 400: a bad request was made`);
+      t.equals(err, `http://localhost:${port}/ [do_not_track] returned status 400: a bad request was made`);
       t.notOk(results);
-      t.ok(logger.isErrorMessage(`http://localhost:${port} [do_not_track] ` +
+      t.ok(logger.isErrorMessage(`http://localhost:${port}/ [do_not_track] ` +
         `returned status 400: a bad request was made`));
       t.end();
 
@@ -340,10 +340,10 @@ tape('failure conditions tests', (test) => {
     };
 
     service(req, (err, results) => {
-      t.equals(err, `http://localhost:${port} [do_not_track] ` +
+      t.equals(err, `http://localhost:${port}/ [do_not_track] ` +
         `could not parse response: this is not parseable as JSON`);
       t.notOk(results, 'should return undefined');
-      t.ok(logger.isErrorMessage(`http://localhost:${port} [do_not_track] ` +
+      t.ok(logger.isErrorMessage(`http://localhost:${port}/ [do_not_track] ` +
         `could not parse response: this is not parseable as JSON`));
       t.end();
 
@@ -553,7 +553,7 @@ tape('success conditions tests', (test) => {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
-    t.ok(logger.isInfoMessage(new RegExp(`using foo service at http://localhost:${port}`)));
+    t.ok(logger.isInfoMessage(new RegExp(`using foo service at http://localhost:${port}/`)));
 
     service({}, (err, results) => {
       t.notOk(err, 'should be no error');
