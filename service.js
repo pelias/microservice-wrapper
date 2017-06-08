@@ -30,7 +30,7 @@ module.exports = function setup(serviceConfig) {
 
   const logger = require( 'pelias-logger' ).get( serviceConfig.getName() );
 
-  if (_.isEmpty(serviceConfig.getBaseUrl())) {
+  if (!serviceConfig.isEnabled()) {
     logger.warn(`${serviceConfig.getName()} service disabled`);
 
     return (req, callback) => {
