@@ -10,8 +10,8 @@ function isDoNotTrack(headers) {
 }
 
 // superagent doesn't exposed the assembled GET request, so synthesize it
-function synthesizeUrl(serviceConfig, req) {
-  const parameters = _.map(serviceConfig.getParameters(req), (value, key) => {
+function synthesizeUrl(serviceConfig, req, res) {
+  const parameters = _.map(serviceConfig.getParameters(req, res), (value, key) => {
     return `${key}=${value}`;
   }).join('&');
 
@@ -33,7 +33,11 @@ module.exports = function setup(serviceConfig) {
   if (!serviceConfig.isEnabled()) {
     logger.warn(`${serviceConfig.getName()} service disabled`);
 
-    return (req, callback) => {
+    return (req, res, callback) => {
+      // only req was passed in so treat res as callback
+      if (_.isUndefined(callback)) {
+        callback = res;
+      }
       // respond with an error to any call
       callback(`${serviceConfig.getName()} service disabled`);
     };
@@ -41,8 +45,14 @@ module.exports = function setup(serviceConfig) {
   }
 
   logger.info(`using ${serviceConfig.getName()} service at ${serviceConfig.getBaseUrl()}`);
-  return (req, callback) => {
-    const headers = serviceConfig.getHeaders(req) || {};
+  return (req, res, callback) => {
+    // only req was passed in so treat res as callback
+    if (_.isUndefined(callback)) {
+      callback = res;
+      res = undefined;
+    }
+
+    const headers = serviceConfig.getHeaders(req, res) || {};
 
     // save off do_not_track value for later check
     const do_not_track = isDoNotTrack(req.headers);
@@ -52,7 +62,7 @@ module.exports = function setup(serviceConfig) {
       logger.debug(`${serviceConfig.getName()}: ${serviceConfig.getBaseUrl()}`);
 
     } else {
-      logger.debug(`${serviceConfig.getName()}: ${synthesizeUrl(serviceConfig, req)}`);
+      logger.debug(`${serviceConfig.getName()}: ${synthesizeUrl(serviceConfig, req, res)}`);
 
     }
 
@@ -62,7 +72,7 @@ module.exports = function setup(serviceConfig) {
       .timeout(serviceConfig.getTimeout())
       .retry(serviceConfig.getRetries())
       .accept('json')
-      .query(serviceConfig.getParameters(req))
+      .query(serviceConfig.getParameters(req, res))
       .on('error', (err) => {
         if (err.status) {
           // first handle case where a non-200 was returned
