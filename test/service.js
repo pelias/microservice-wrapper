@@ -166,7 +166,11 @@ tape('failure conditions tests', (test) => {
         super('foo', { url: `http://localhost:${port}` } );
       }
       getUrl(req) {
-        return `http://localhost:${port}/built_url`;
+        return `http://localhost:${port}/some_endpoint`;
+      }
+      getParameters(req) {
+        // combine req and res to show that both were passed
+        return _.extend({}, req.params, res.params);
       }
     };
 
@@ -174,12 +178,26 @@ tape('failure conditions tests', (test) => {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
+    // setup non-empty req and res so their contents can be used later by MockServiceConfig
+    const req = {
+      // referenced in getParameters
+      params: {
+        req_param: 'req_param value'
+      }
+    };
+    const res = {
+      // referenced in getParameters
+      params: {
+        res_param: 'res_param value'
+      }
+    };
+
     t.ok(logger.isInfoMessage(new RegExp(`using foo service at http://localhost:${port}`)));
 
-    service({}, {}, (err, results) => {
+    service(req, res, (err, results) => {
       t.equals(err.code, 'ECONNREFUSED');
       t.notOk(results);
-      t.ok(logger.isErrorMessage(new RegExp(`^http://localhost:${port}/built_url: .*ECONNREFUSED`)),
+      t.ok(logger.isErrorMessage(new RegExp(`^http://localhost:${port}/some_endpoint\\?req_param=req_param%20value&res_param=res_param%20value: .*ECONNREFUSED`)),
         'there should be a connection refused error message');
       t.end();
 
@@ -239,7 +257,7 @@ tape('failure conditions tests', (test) => {
       t.notOk(req.headers.hasOwnProperty('dnt'), 'dnt header should not have been passed');
 
       t.equals(req.headers.header1, 'header1 value', 'all headers should have been passed');
-      t.deepEquals(req.query, { param1: 'param1 value', param2: 'param2 value' });
+      t.deepEquals(req.query, { req_param: 'req_param value', res_param: 'res_param value' });
 
       res.status(400).send('a bad request was made');
     });
@@ -257,7 +275,8 @@ tape('failure conditions tests', (test) => {
         return `http://localhost:${port}/some_endpoint`;
       }
       getParameters(req) {
-        return { param1: 'param1 value', param2: 'param2 value' };
+        // combine req and res to show that both were passed
+        return _.extend({}, req.params, res.params);
       }
       getHeaders(req) {
         return { header1: 'header1 value' };
@@ -268,13 +287,27 @@ tape('failure conditions tests', (test) => {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
+    // setup non-empty req and res so their contents can be used later by MockServiceConfig
+    const req = {
+      // referenced in getParameters
+      params: {
+        req_param: 'req_param value'
+      }
+    };
+    const res = {
+      // referenced in getParameters
+      params: {
+        res_param: 'res_param value'
+      }
+    };
+
     t.ok(logger.isInfoMessage(new RegExp(`using foo service at http://localhost:${port}`)));
 
-    service({}, {}, (err, results) => {
-      t.equals(err, `http://localhost:${port}/some_endpoint?param1=param1%20value&param2=param2%20value ` +
+    service(req, res, (err, results) => {
+      t.equals(err, `http://localhost:${port}/some_endpoint?req_param=req_param%20value&res_param=res_param%20value ` +
         'returned status 400: a bad request was made');
       t.notOk(results);
-      t.ok(logger.isErrorMessage(`http://localhost:${port}/some_endpoint?param1=param1%20value&param2=param2%20value ` +
+      t.ok(logger.isErrorMessage(`http://localhost:${port}/some_endpoint?req_param=req_param%20value&res_param=res_param%20value ` +
         `returned status 400: a bad request was made`));
       t.end();
 
@@ -347,7 +380,7 @@ tape('failure conditions tests', (test) => {
       t.notOk(req.headers.hasOwnProperty('dnt'), 'dnt header should not have been passed');
 
       t.equals(req.headers.header1, 'header1 value', 'all headers should have been passed');
-      t.deepEquals(req.query, { param1: 'param1 value', param2: 'param2 value' });
+      t.deepEquals(req.query, { req_param: 'req_param value', res_param: 'res_param value' });
 
       res.set('Content-Type', 'text/plain').status(200).send('this is not parseable as JSON');
     });
@@ -365,7 +398,8 @@ tape('failure conditions tests', (test) => {
         return `http://localhost:${port}/some_endpoint`;
       }
       getParameters(req) {
-        return { param1: 'param1 value', param2: 'param2 value' };
+        // combine req and res to show that both were passed
+        return _.extend({}, req.params, res.params);
       }
       getHeaders(req) {
         return { header1: 'header1 value' };
@@ -376,13 +410,27 @@ tape('failure conditions tests', (test) => {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
+    // setup non-empty req and res so their contents can be used later by MockServiceConfig
+    const req = {
+      // referenced in getParameters
+      params: {
+        req_param: 'req_param value'
+      }
+    };
+    const res = {
+      // referenced in getParameters
+      params: {
+        res_param: 'res_param value'
+      }
+    };
+
     t.ok(logger.isInfoMessage(new RegExp(`using foo service at http://localhost:${port}`)));
 
-    service({}, {}, (err, results) => {
-      t.equals(err, `http://localhost:${port}/some_endpoint?param1=param1%20value&param2=param2%20value ` +
+    service(req, res, (err, results) => {
+      t.equals(err, `http://localhost:${port}/some_endpoint?req_param=req_param%20value&res_param=res_param%20value ` +
         `could not parse response: this is not parseable as JSON`);
       t.notOk(results, 'should return undefined');
-      t.ok(logger.isErrorMessage(`http://localhost:${port}/some_endpoint?param1=param1%20value&param2=param2%20value ` +
+      t.ok(logger.isErrorMessage(`http://localhost:${port}/some_endpoint?req_param=req_param%20value&res_param=res_param%20value ` +
         `could not parse response: this is not parseable as JSON`));
       t.end();
 
@@ -471,7 +519,8 @@ tape('failure conditions tests', (test) => {
         return `http://localhost:${port}/some_endpoint`;
       }
       getParameters(req) {
-        return { param1: 'param1 value', param2: 'param2 value' };
+        // combine req and res to show that both were passed
+        return _.extend({}, req.params, res.params);
       }
       getHeaders(req) {
         return { header1: 'header1 value' };
@@ -485,13 +534,27 @@ tape('failure conditions tests', (test) => {
       'pelias-logger': logger
     })(new MockServiceConfig());
 
+    // setup non-empty req and res so their contents can be used later by MockServiceConfig
+    const req = {
+      // referenced in getParameters
+      params: {
+        req_param: 'req_param value'
+      }
+    };
+    const res = {
+      // referenced in getParameters
+      params: {
+        res_param: 'res_param value'
+      }
+    };
+
     t.ok(logger.isInfoMessage(new RegExp(`using foo service at http://localhost:${port}`)));
 
-    service({}, {}, (err, results) => {
-      t.equals(err, `http://localhost:${port}/some_endpoint?param1=param1%20value&param2=param2%20value ` +
+    service(req, res, (err, results) => {
+      t.equals(err, `http://localhost:${port}/some_endpoint?req_param=req_param%20value&res_param=res_param%20value ` +
         'returned status 503: request timeout');
       t.notOk(results);
-      t.ok(logger.isErrorMessage(`http://localhost:${port}/some_endpoint?param1=param1%20value&param2=param2%20value ` +
+      t.ok(logger.isErrorMessage(`http://localhost:${port}/some_endpoint?req_param=req_param%20value&res_param=res_param%20value ` +
         `returned status 503: request timeout`));
       t.equals(requestCount, 2);
       t.end();

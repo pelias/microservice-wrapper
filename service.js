@@ -80,8 +80,8 @@ module.exports = function setup(serviceConfig) {
             logger.error(`${serviceConfig.getBaseUrl()} [do_not_track] returned status ${err.status}: ${err.response.text}`);
             return callback(`${serviceConfig.getBaseUrl()} [do_not_track] returned status ${err.status}: ${err.response.text}`);
           } else {
-            logger.error(`${synthesizeUrl(serviceConfig, req)} returned status ${err.status}: ${err.response.text}`);
-            return callback(`${synthesizeUrl(serviceConfig, req)} returned status ${err.status}: ${err.response.text}`);
+            logger.error(`${synthesizeUrl(serviceConfig, req, res)} returned status ${err.status}: ${err.response.text}`);
+            return callback(`${synthesizeUrl(serviceConfig, req, res)} returned status ${err.status}: ${err.response.text}`);
           }
 
         }
@@ -91,7 +91,7 @@ module.exports = function setup(serviceConfig) {
           logger.error(`${serviceConfig.getBaseUrl()} [do_not_track]: ${JSON.stringify(err)}`);
           return callback(err);
         } else {
-          logger.error(`${serviceConfig.getUrl(req)}: ${JSON.stringify(err)}`);
+          logger.error(`${synthesizeUrl(serviceConfig, req, res)}: ${JSON.stringify(err)}`);
           return callback(err);
         }
 
@@ -111,8 +111,8 @@ module.exports = function setup(serviceConfig) {
           logger.error(`${serviceConfig.getBaseUrl()} [do_not_track] could not parse response: ${response.text}`);
           return callback(`${serviceConfig.getBaseUrl()} [do_not_track] could not parse response: ${response.text}`);
         } else {
-          logger.error(`${synthesizeUrl(serviceConfig, req)} could not parse response: ${response.text}`);
-          return callback(`${synthesizeUrl(serviceConfig, req)} could not parse response: ${response.text}`);
+          logger.error(`${synthesizeUrl(serviceConfig, req, res)} could not parse response: ${response.text}`);
+          return callback(`${synthesizeUrl(serviceConfig, req, res)} could not parse response: ${response.text}`);
         }
 
       });
