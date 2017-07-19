@@ -35,6 +35,8 @@ The [ServiceConfiguration](https://github.com/pelias/microservice-wrapper/blob/m
 | `timeout` | no | `250` | the number of milliseconds a request should wait for a server response before timing out |
 | `retries` | no | `3` | the number of retries to attempt before returning an error |
 
+Requests are logged at the `debug` level when enabled in [pelias-config](https://github.com/pelias/config).
+
 ### Example
 
 ```javascript

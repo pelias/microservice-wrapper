@@ -49,6 +49,11 @@ module.exports = function setup(serviceConfig) {
 
     if (do_not_track) {
       headers.dnt = '1';
+      logger.debug(`${serviceConfig.getName()}: ${serviceConfig.getBaseUrl()}`);
+
+    } else {
+      logger.debug(`${serviceConfig.getName()}: ${synthesizeUrl(serviceConfig, req)}`);
+
     }
 
     request

@@ -32,6 +32,99 @@ tape('conforms_to tests', (test) => {
 
 });
 
+tape('request logging', (test) => {
+  test.test('full request should be debug-logged when do-not-track is disabled', (t) => {
+    const webServer = express();
+    webServer.get('/some_endpoint', (req, res, next) => {
+      res.status(200).json({});
+    });
+
+    const server = webServer.listen();
+    const port = server.address().port;
+
+    const logger = require('pelias-mock-logger')();
+
+    const MockServiceConfig = class extends ServiceConfiguration {
+      constructor(o) {
+        super('foo', { url: `http://localhost:${port}` } );
+      }
+      getUrl(req) {
+        return `http://localhost:${port}/some_endpoint`;
+      }
+      getParameters(req) {
+        return { param1: 'param1 value', param2: 'param2 value' };
+      }
+      getHeaders(req) {
+        return { header1: 'header1 value' };
+      }
+    };
+
+    const service = proxyquire('../service', {
+      'pelias-logger': logger
+    })(new MockServiceConfig());
+
+    t.ok(logger.isInfoMessage(new RegExp(`using foo service at http://localhost:${port}`)));
+
+    service({}, (err, results) => {
+      t.ok(logger.isDebugMessage(`foo: http://localhost:${port}/some_endpoint?param1=param1%20value&param2=param2%20value`));
+      t.end();
+
+      server.close();
+
+    });
+
+  });
+
+  test.test('sanitized request should be debug-logged when do-not-track is enabled', (t) => {
+    const webServer = express();
+    webServer.get('/some_endpoint', (req, res, next) => {
+      res.status(200).json({});
+    });
+
+    const server = webServer.listen();
+    const port = server.address().port;
+
+    const logger = require('pelias-mock-logger')();
+
+    const MockServiceConfig = class extends ServiceConfiguration {
+      constructor(o) {
+        super('foo', { url: `http://localhost:${port}` } );
+      }
+      getUrl(req) {
+        return `http://localhost:${port}/some_endpoint`;
+      }
+      getParameters(req) {
+        return { param1: 'param1 value', param2: 'param2 value' };
+      }
+      getHeaders(req) {
+        return { header1: 'header1 value' };
+      }
+    };
+
+    const req = {
+      headers: {
+        dnt: 1
+      }
+    };
+
+    const service = proxyquire('../service', {
+      'pelias-logger': logger
+    })(new MockServiceConfig());
+
+    t.ok(logger.isInfoMessage(new RegExp(`using foo service at http://localhost:${port}`)));
+
+    service(req, (err, results) => {
+      t.ok(logger.isDebugMessage(`foo: http://localhost:${port}/`));
+      t.end();
+
+      server.close();
+
+    });
+
+  });
+
+});
+
 tape('do-nothing service tests', (test) => {
   test.test('undefined config.url should return service that logs that config.name service is not available', (t) => {
     const logger = require('pelias-mock-logger')();
