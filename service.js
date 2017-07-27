@@ -1,3 +1,5 @@
+'use strict';
+
 const request = require('superagent');
 const _ = require('lodash');
 
@@ -10,8 +12,8 @@ function isDoNotTrack(headers) {
 }
 
 // superagent doesn't exposed the assembled GET request, so synthesize it
-function synthesizeUrl(serviceConfig, req) {
-  const parameters = _.map(serviceConfig.getParameters(req), (value, key) => {
+function synthesizeUrl(serviceConfig, req, res) {
+  const parameters = _.map(serviceConfig.getParameters(req, res), (value, key) => {
     return `${key}=${value}`;
   }).join('&');
 
@@ -33,7 +35,11 @@ module.exports = function setup(serviceConfig) {
   if (!serviceConfig.isEnabled()) {
     logger.warn(`${serviceConfig.getName()} service disabled`);
 
-    return (req, callback) => {
+    return (req, res, callback) => {
+      // only req was passed in so treat res as callback
+      if (_.isUndefined(callback)) {
+        callback = res;
+      }
       // respond with an error to any call
       callback(`${serviceConfig.getName()} service disabled`);
     };
@@ -41,20 +47,27 @@ module.exports = function setup(serviceConfig) {
   }
 
   logger.info(`using ${serviceConfig.getName()} service at ${serviceConfig.getBaseUrl()}`);
-  return (req, callback) => {
-    const headers = serviceConfig.getHeaders(req) || {};
+  return (req, res, callback) => {
+    // only req was passed in so treat res as callback
+    if (_.isUndefined(callback)) {
+      callback = res;
+      res = undefined;
+    }
+
+    const headers = serviceConfig.getHeaders(req, res) || {};
 
     // save off do_not_track value for later check
     const do_not_track = isDoNotTrack(req.headers);
+    let url_for_logging;
 
     if (do_not_track) {
       headers.dnt = '1';
-      logger.debug(`${serviceConfig.getName()}: ${serviceConfig.getBaseUrl()}`);
-
+      url_for_logging = serviceConfig.getBaseUrl();
     } else {
-      logger.debug(`${serviceConfig.getName()}: ${synthesizeUrl(serviceConfig, req)}`);
-
+      url_for_logging = synthesizeUrl(serviceConfig, req, res);
     }
+
+    logger.debug(`${serviceConfig.getName()}: ${url_for_logging}`);
 
     request
       .get(serviceConfig.getUrl(req))
@@ -62,26 +75,26 @@ module.exports = function setup(serviceConfig) {
       .timeout(serviceConfig.getTimeout())
       .retry(serviceConfig.getRetries())
       .accept('json')
-      .query(serviceConfig.getParameters(req))
+      .query(serviceConfig.getParameters(req, res))
       .on('error', (err) => {
         if (err.status) {
           // first handle case where a non-200 was returned
           if (do_not_track) {
-            logger.error(`${serviceConfig.getBaseUrl()} [do_not_track] returned status ${err.status}: ${err.response.text}`);
-            return callback(`${serviceConfig.getBaseUrl()} [do_not_track] returned status ${err.status}: ${err.response.text}`);
+            logger.error(`${url_for_logging} [do_not_track] returned status ${err.status}: ${err.response.text}`);
+            return callback(`${url_for_logging} [do_not_track] returned status ${err.status}: ${err.response.text}`);
           } else {
-            logger.error(`${synthesizeUrl(serviceConfig, req)} returned status ${err.status}: ${err.response.text}`);
-            return callback(`${synthesizeUrl(serviceConfig, req)} returned status ${err.status}: ${err.response.text}`);
+            logger.error(`${url_for_logging} returned status ${err.status}: ${err.response.text}`);
+            return callback(`${url_for_logging} returned status ${err.status}: ${err.response.text}`);
           }
 
         }
 
         // handle case that something catastrophic happened while contacting the server
         if (do_not_track) {
-          logger.error(`${serviceConfig.getBaseUrl()} [do_not_track]: ${JSON.stringify(err)}`);
+          logger.error(`${url_for_logging} [do_not_track]: ${JSON.stringify(err)}`);
           return callback(err);
         } else {
-          logger.error(`${serviceConfig.getUrl(req)}: ${JSON.stringify(err)}`);
+          logger.error(`${url_for_logging}: ${JSON.stringify(err)}`);
           return callback(err);
         }
 
@@ -98,11 +111,11 @@ module.exports = function setup(serviceConfig) {
         }
 
         if (do_not_track) {
-          logger.error(`${serviceConfig.getBaseUrl()} [do_not_track] could not parse response: ${response.text}`);
-          return callback(`${serviceConfig.getBaseUrl()} [do_not_track] could not parse response: ${response.text}`);
+          logger.error(`${url_for_logging} [do_not_track] could not parse response: ${response.text}`);
+          return callback(`${url_for_logging} [do_not_track] could not parse response: ${response.text}`);
         } else {
-          logger.error(`${synthesizeUrl(serviceConfig, req)} could not parse response: ${response.text}`);
-          return callback(`${synthesizeUrl(serviceConfig, req)} could not parse response: ${response.text}`);
+          logger.error(`${url_for_logging} could not parse response: ${response.text}`);
+          return callback(`${url_for_logging} could not parse response: ${response.text}`);
         }
 
       });
