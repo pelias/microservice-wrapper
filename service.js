@@ -1,3 +1,5 @@
+'use strict';
+
 const request = require('superagent');
 const _ = require('lodash');
 
@@ -56,13 +58,16 @@ module.exports = function setup(serviceConfig) {
 
     // save off do_not_track value for later check
     const do_not_track = isDoNotTrack(req.headers);
+    let url_for_logging;
 
     if (do_not_track) {
       headers.dnt = '1';
-      logger.debug(`${serviceConfig.getName()}: ${serviceConfig.getBaseUrl()}`);
+      url_for_logging = serviceConfig.getBaseUrl();
+      logger.debug(`${serviceConfig.getName()}: ${url_for_logging}`);
 
     } else {
-      logger.debug(`${serviceConfig.getName()}: ${synthesizeUrl(serviceConfig, req, res)}`);
+      url_for_logging = synthesizeUrl(serviceConfig, req, res);
+      logger.debug(`${serviceConfig.getName()}: ${url_for_logging}`);
 
     }
 
@@ -77,21 +82,21 @@ module.exports = function setup(serviceConfig) {
         if (err.status) {
           // first handle case where a non-200 was returned
           if (do_not_track) {
-            logger.error(`${serviceConfig.getBaseUrl()} [do_not_track] returned status ${err.status}: ${err.response.text}`);
-            return callback(`${serviceConfig.getBaseUrl()} [do_not_track] returned status ${err.status}: ${err.response.text}`);
+            logger.error(`${url_for_logging} [do_not_track] returned status ${err.status}: ${err.response.text}`);
+            return callback(`${url_for_logging} [do_not_track] returned status ${err.status}: ${err.response.text}`);
           } else {
-            logger.error(`${synthesizeUrl(serviceConfig, req, res)} returned status ${err.status}: ${err.response.text}`);
-            return callback(`${synthesizeUrl(serviceConfig, req, res)} returned status ${err.status}: ${err.response.text}`);
+            logger.error(`${url_for_logging} returned status ${err.status}: ${err.response.text}`);
+            return callback(`${url_for_logging} returned status ${err.status}: ${err.response.text}`);
           }
 
         }
 
         // handle case that something catastrophic happened while contacting the server
         if (do_not_track) {
-          logger.error(`${serviceConfig.getBaseUrl()} [do_not_track]: ${JSON.stringify(err)}`);
+          logger.error(`${url_for_logging} [do_not_track]: ${JSON.stringify(err)}`);
           return callback(err);
         } else {
-          logger.error(`${synthesizeUrl(serviceConfig, req, res)}: ${JSON.stringify(err)}`);
+          logger.error(`${url_for_logging}: ${JSON.stringify(err)}`);
           return callback(err);
         }
 
@@ -108,11 +113,11 @@ module.exports = function setup(serviceConfig) {
         }
 
         if (do_not_track) {
-          logger.error(`${serviceConfig.getBaseUrl()} [do_not_track] could not parse response: ${response.text}`);
-          return callback(`${serviceConfig.getBaseUrl()} [do_not_track] could not parse response: ${response.text}`);
+          logger.error(`${url_for_logging} [do_not_track] could not parse response: ${response.text}`);
+          return callback(`${url_for_logging} [do_not_track] could not parse response: ${response.text}`);
         } else {
-          logger.error(`${synthesizeUrl(serviceConfig, req, res)} could not parse response: ${response.text}`);
-          return callback(`${synthesizeUrl(serviceConfig, req, res)} could not parse response: ${response.text}`);
+          logger.error(`${url_for_logging} could not parse response: ${response.text}`);
+          return callback(`${url_for_logging} could not parse response: ${response.text}`);
         }
 
       });
