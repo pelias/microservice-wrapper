@@ -63,13 +63,11 @@ module.exports = function setup(serviceConfig) {
     if (do_not_track) {
       headers.dnt = '1';
       url_for_logging = serviceConfig.getBaseUrl();
-      logger.debug(`${serviceConfig.getName()}: ${url_for_logging}`);
-
     } else {
       url_for_logging = synthesizeUrl(serviceConfig, req, res);
-      logger.debug(`${serviceConfig.getName()}: ${url_for_logging}`);
-
     }
+
+    logger.debug(`${serviceConfig.getName()}: ${url_for_logging}`);
 
     request
       .get(serviceConfig.getUrl(req))
