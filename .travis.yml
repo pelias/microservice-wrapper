@@ -10,9 +10,9 @@ node_js:
   - 6
 matrix:
     fast_finish: true
-    allow_failures:
 env:
   global:
+    - BUILD_LEADER_ID=2
     - CXX=g++-4.8
 script: "npm run travis"
 addons:
@@ -26,7 +26,5 @@ before_install:
 before_script:
   - npm prune
 after_success:
-  - 'curl -Lo travis_after_all.py https://git.io/travis_after_all'
-  - python travis_after_all.py
-  - export $(cat .to_export_back) &> /dev/null
-  - npm run semantic-release
+  - npm install -g npx
+  - npx -p node@8 npm run semantic-release
