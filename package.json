@@ -26,7 +26,7 @@
   "devDependencies": {
     "express": "^4.15.2",
     "npm-check": "git://github.com/orangejulius/npm-check.git#disable-update-check",
-    "pelias-mock-logger": "^1.2.0",
+    "pelias-mock-logger": "1.2.0",
     "proxyquire": "^1.7.11",
     "semantic-release": "^6.3.2",
     "tap-dot": "^1.0.5",
