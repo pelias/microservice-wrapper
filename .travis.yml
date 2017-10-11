@@ -9,11 +9,11 @@ node_js:
   - 4
   - 6
 matrix:
-    fast_finish: true
+  fast_finish: true
 env:
   global:
     - BUILD_LEADER_ID=2
-script: "npm run travis"
+script: npm run travis
 before_install:
   - npm i -g npm@^2.0.0
 before_script:
