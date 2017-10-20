@@ -28,13 +28,13 @@
     "npm-check": "git://github.com/orangejulius/npm-check.git#disable-update-check",
     "pelias-mock-logger": "1.2.0",
     "proxyquire": "^1.7.11",
-    "semantic-release": "^6.3.2",
+    "semantic-release": "^8.2.0",
     "tap-dot": "^1.0.5",
     "tape": "^4.6.3"
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "pelias-logger": "^0.2.0",
+    "pelias-logger": "^0.3.0",
     "superagent": "^3.5.2"
   },
   "pre-commit": [
