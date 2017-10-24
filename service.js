@@ -1,5 +1,6 @@
 'use strict';
 
+const http = require('http');
 const request = require('superagent');
 const _ = require('lodash');
 
@@ -47,6 +48,12 @@ module.exports = function setup(serviceConfig) {
   }
 
   logger.info(`using ${serviceConfig.getName()} service at ${serviceConfig.getBaseUrl()}`);
+
+  // create one HTTP agent with keep alives enabled per service instance
+  const agent = new http.Agent({
+    keepAlive: true
+  });
+
   return (req, res, callback) => {
     // only req was passed in so treat res as callback
     if (_.isUndefined(callback)) {
@@ -74,6 +81,7 @@ module.exports = function setup(serviceConfig) {
       .set(headers)
       .timeout(serviceConfig.getTimeout())
       .retry(serviceConfig.getRetries())
+      .agent(agent)
       .accept('json')
       .query(serviceConfig.getParameters(req, res))
       .on('error', (err) => {
