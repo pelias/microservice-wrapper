@@ -25,7 +25,7 @@
     "express": "^4.15.2",
     "pelias-mock-logger": "1.2.0",
     "proxyquire": "^2.0.0",
-    "semantic-release": "^8.2.0",
+    "semantic-release": "^15.4.1",
     "tap-dot": "^1.0.5",
     "tape": "^4.6.3"
   },
