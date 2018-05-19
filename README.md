@@ -1,4 +1,7 @@
-> This repository is part of the [Pelias](https://github.com/pelias/pelias) project. Pelias is an open-source, open-data geocoder built by [Mapzen](https://www.mapzen.com/) that also powers [Mapzen Search](https://mapzen.com/projects/search). Our official user documentation is [here](https://mapzen.com/documentation/search/).
+>This repository is part of the [Pelias](https://github.com/pelias/pelias)
+>project. Pelias is an open-source, open-data geocoder originally sponsored by
+>[Mapzen](https://www.mapzen.com/). Our official user documentation is
+>[here](https://github.com/pelias/documentation).
 
 # Pelias Microservice Wrapper
 
@@ -9,7 +12,7 @@
 
 ## Overview
 
-Module that provides a convenience wrapper for calling Pelias microservices such as [Placeholder](https://github.com/pelias/placeholder) or [Point-in-Polygon Service](https://github.com/pelias/pip-service) over HTTP GET.  
+Module that provides a convenience wrapper for calling Pelias microservices such as [Placeholder](https://github.com/pelias/placeholder) or [Point-in-Polygon Service](https://github.com/pelias/pip-service) over HTTP GET.
 
 ## Installation
 
@@ -27,7 +30,7 @@ The `pelias-microservice-wrapper` npm module can be found here:
 
 ## Usage
 
-This module is primarily used in the Pelias [API](https://github.com/pelias/api) to call microservices.  To add support for a microservice in the API, define a class that derives from [ServiceConfiguration](https://github.com/pelias/microservice-wrapper/blob/master/ServiceConfiguration.js), override any methods, and inject into a [service](https://github.com/pelias/microservice-wrapper/blob/master/service.js) instance.  
+This module is primarily used in the Pelias [API](https://github.com/pelias/api) to call microservices.  To add support for a microservice in the API, define a class that derives from [ServiceConfiguration](https://github.com/pelias/microservice-wrapper/blob/master/ServiceConfiguration.js), override any methods, and inject into a [service](https://github.com/pelias/microservice-wrapper/blob/master/service.js) instance.
 
 The [ServiceConfiguration](https://github.com/pelias/microservice-wrapper/blob/master/ServiceConfiguration.js) constructor accepts a string service name (returned by `getName()` and an object containing the three optional properties:
 

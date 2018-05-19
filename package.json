@@ -6,15 +6,13 @@
   "scripts": {
     "test": "node test/test | tap-dot",
     "lint": "jshint .",
-    "travis": "npm run check-dependencies && npm test",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "validate": "npm ls",
-    "check-dependencies": "node_modules/.bin/npm-check --production"
+    "travis": "npm test",
+    "validate": "npm ls"
   },
   "author": "Mapzen",
   "license": "MIT",
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 6.0.0"
   },
   "repository": {
     "type": "git",
@@ -25,10 +23,9 @@
   ],
   "devDependencies": {
     "express": "^4.15.2",
-    "npm-check": "git://github.com/orangejulius/npm-check.git#disable-update-check",
     "pelias-mock-logger": "1.2.0",
     "proxyquire": "^2.0.0",
-    "semantic-release": "^8.2.0",
+    "semantic-release": "^15.4.1",
     "tap-dot": "^1.0.5",
     "tape": "^4.6.3"
   },
@@ -40,7 +37,9 @@
   "pre-commit": [
     "lint",
     "validate",
-    "test",
-    "check-dependencies"
-  ]
+    "test"
+  ],
+  "release": {
+    "success": []
+  }
 }
