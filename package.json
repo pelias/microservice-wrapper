@@ -4,7 +4,7 @@
   "description": "Module that provides a convenience wrapper around HTTP GET microservices",
   "main": "index.js",
   "scripts": {
-    "test": "node test/test | tap-dot",
+    "test": "./bin/test",
     "lint": "jshint .",
     "travis": "npm test",
     "validate": "npm ls"
