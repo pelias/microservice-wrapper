@@ -14,7 +14,7 @@ class ServiceConfiguration {
     } else {
       this.baseUrl = config.url;
     }
-    this.timeout = config.timeout || 250;
+    this.timeout = config.timeout || 1000;
     this.retries = config.retries || 3;
 
   }
