@@ -34,14 +34,14 @@ tape('ServiceConfiguration tests', (test) => {
 
   });
 
-  test.test('configBlob w/o timeout or retries should default to 250 and 3, respectively', (t) => {
+  test.test('configBlob w/o timeout or retries should default to 1000ms and 3, respectively', (t) => {
     const configBlob = {
       url: 'http://localhost:1234/'
     };
 
     const serviceConfiguration = new ServiceConfiguration('service name', configBlob);
 
-    t.equals(serviceConfiguration.getTimeout(), 250, 'should be a default of 250');
+    t.equals(serviceConfiguration.getTimeout(), 1000, 'timeout should have default value');
     t.equals(serviceConfiguration.getRetries(), 3, 'should be a default of 3');
     t.end();
 
