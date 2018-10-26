@@ -76,6 +76,8 @@ module.exports = function setup(serviceConfig) {
 
     logger.debug(`${serviceConfig.getName()}: ${url_for_logging}`);
 
+    const startTime = Date.now();
+
     request
       .get(serviceConfig.getUrl(req))
       .set(headers)
@@ -113,17 +115,21 @@ module.exports = function setup(serviceConfig) {
           return;
         }
 
+        const metadata = {
+          response_time: Date.now() - startTime
+        };
+
         // if json was returned then just return it
         if (response.type === 'application/json') {
-          return callback(null, response.body);
+          return callback(null, response.body, metadata);
         }
 
         if (do_not_track) {
           logger.error(`${url_for_logging} [do_not_track] could not parse response: ${response.text}`);
-          return callback(`${url_for_logging} [do_not_track] could not parse response: ${response.text}`);
+          return callback(`${url_for_logging} [do_not_track] could not parse response: ${response.text}`, null, metadata);
         } else {
           logger.error(`${url_for_logging} could not parse response: ${response.text}`);
-          return callback(`${url_for_logging} could not parse response: ${response.text}`);
+          return callback(`${url_for_logging} could not parse response: ${response.text}`, null, metadata);
         }
 
       });
