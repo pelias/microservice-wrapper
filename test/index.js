@@ -8,4 +8,5 @@ tape('index tests', (test) => {
     t.equals(typeof index.ServiceConfiguration, 'function');
     t.end();
   });
+  test.end();
 });

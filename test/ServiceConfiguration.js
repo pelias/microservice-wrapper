@@ -89,5 +89,6 @@ tape('ServiceConfiguration tests', (test) => {
     t.end();
 
   });
+  test.end();
 
 });
