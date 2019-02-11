@@ -19,6 +19,8 @@ tape('service tests', (test) => {
     t.end();
   });
 
+  test.end();
+
 });
 
 tape('conforms_to tests', (test) => {
@@ -31,6 +33,7 @@ tape('conforms_to tests', (test) => {
 
   });
 
+  test.end();
 });
 
 tape('request logging', (test) => {
@@ -123,6 +126,7 @@ tape('request logging', (test) => {
     });
 
   });
+  test.end();
 
 });
 
@@ -148,6 +152,7 @@ tape('service disabled tests', (test) => {
     });
 
   });
+  test.end();
 
 });
 
@@ -564,6 +569,7 @@ tape('failure conditions tests', (test) => {
     });
 
   });
+  test.end();
 
 });
 
@@ -768,6 +774,7 @@ tape('success conditions tests', (test) => {
     });
 
   });
+  test.end();
 
 });
 
@@ -845,5 +852,5 @@ tape('callback-as-2nd-parameter tests', (test) => {
     });
 
   });
-
+  test.end();
 });
