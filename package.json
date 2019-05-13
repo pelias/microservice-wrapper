@@ -31,7 +31,7 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "pelias-logger": "^1.2.1",
-    "superagent": "^4.0.0"
+    "superagent": "^5.0.2"
   },
   "pre-commit": [
     "lint",
