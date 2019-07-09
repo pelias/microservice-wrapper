@@ -37,7 +37,7 @@ The [ServiceConfiguration](https://github.com/pelias/microservice-wrapper/blob/m
 | property | required | default | description |
 | --- | --- | --- | --- |
 | `baseUrl` | no | none | the base URL used for contacting a service, causes `isEnabled()` to return `false` when an empty string |
-| `timeout` | no | `250` | the number of milliseconds a request should wait for a server response before timing out |
+| `timeout` | no | `1000` | the number of milliseconds a request should wait for a server response before timing out |
 | `retries` | no | `3` | the number of retries to attempt before returning an error |
 
 Requests are logged at the `debug` level when enabled in [pelias-config](https://github.com/pelias/config).
@@ -99,7 +99,7 @@ demoService.getHeaders(req) === {
 | `getUrl` | yes | value of `getBaseUrl` unless overridden | used for appending other value to the baseUrl (but not request parameters) |
 | `getParameters` | yes| `{}` unless overridden | any request parameters to pass to the microservice |
 | `getHeaders` | yes | `{}` unless overridden | any request headers to pass to the microservice |
-| `getTimeout` | not recommended | `250` or value passed to constructor | how long a request should wait for a server response before timing out |
+| `getTimeout` | not recommended | `1000` or value passed to constructor | how long a request should wait for a server response before timing out |
 | `getRetries` | not recommended | `3` or value passed to constructor | how many attempts should be made before returning an error |
 
 #### Recommended `ServiceConfiguration` Method Overrides
