@@ -1,6 +1,5 @@
-'use strict';
-
 const http = require('http');
+const https = require('https');
 const request = require('superagent');
 const _ = require('lodash');
 
@@ -49,8 +48,10 @@ module.exports = function setup(serviceConfig) {
 
   logger.info(`using ${serviceConfig.getName()} service at ${serviceConfig.getBaseUrl()}`);
 
+  const connection_library = serviceConfig.getBaseUrl().startsWith('https') ? https : http;
+
   // create one HTTP agent with keep alives enabled per service instance
-  const agent = new http.Agent({
+  const agent = new connection_library.Agent({
     keepAlive: true
   });
 
