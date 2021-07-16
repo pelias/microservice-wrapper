@@ -5,11 +5,6 @@
 
 # Pelias Microservice Wrapper
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/pelias/microservice-wrapper.svg)](https://greenkeeper.io/)
-
-![Travis CI Status](https://travis-ci.org/pelias/microservice-wrapper.svg)
-[![Gitter Chat](https://badges.gitter.im/pelias/pelias.svg)](https://gitter.im/pelias/pelias?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
 ## Overview
 
 Module that provides a convenience wrapper for calling Pelias microservices such as [Placeholder](https://github.com/pelias/placeholder) or [Point-in-Polygon Service](https://github.com/pelias/pip-service) over HTTP GET.
